@@ -8,18 +8,39 @@
  * }
  */
 class Solution {
+    List<TreeNode> list1;
+    List<TreeNode> list2;
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root == null || root == p || root == q)
-            return root;
+        list1 = new ArrayList<>();
+        list2 = new ArrayList<>();
         
-        TreeNode left = lowestCommonAncestor(root.left,p,q);
-        TreeNode right = lowestCommonAncestor(root.right,p,q);
+        path(1, root, p, new ArrayList<>());
+        path(2, root, q, new ArrayList<>());
         
-        if(left == null)
-            return right;
-        else if(right == null)
-            return left;
-        else
-            return root;
+        TreeNode ans = root;
+        for(int i=0;i<Math.min(list1.size(),list2.size());i++){
+            if(list1.get(i) == list2.get(i)){
+                ans = list1.get(i);
+            }
+            else
+                break;
+        }
+        return ans;
     }
+     public void path(int listType, TreeNode node, TreeNode target, List<TreeNode> list){
+         if(node == null) 
+             return;
+         list.add(node);
+         if(node == target){
+             if(listType == 1){
+                  list1 = new ArrayList<>(list);
+             }
+             else{
+                  list2 = new ArrayList<>(list);
+             }
+         }
+         path(listType, node.left, target, list);
+        path(listType, node.right, target, list);
+        list.remove(list.size()-1);
+     }
 }
