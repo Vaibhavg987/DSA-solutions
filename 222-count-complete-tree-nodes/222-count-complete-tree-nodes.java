@@ -15,14 +15,28 @@
  */
 class Solution {
     public int countNodes(TreeNode root) {
-        return orderTraversal(root);
+        if(root == null) return 0;
+        
+        int left = getLeftHeight(root);
+        int right = getRightHeight(root);
+        
+        if(left == right) return ((2<<(left))-1);
+        else return 1+countNodes(root.left)+countNodes(root.right);
     }
-    private int orderTraversal(TreeNode root)
-     {
-         if(root != null)
-      {
-       return 1 + orderTraversal(root.left)+orderTraversal(root.right);
-      }
-      return 0;  
-}
+    public int getLeftHeight(TreeNode root){
+        int count=0;
+        while(root.left!=null){
+            count++;
+            root=root.left;
+        }
+        return count;
+    }
+    public int getRightHeight(TreeNode root){
+        int count=0;
+        while(root.right!=null){
+            count++;
+            root=root.right;
+        }
+        return count;
+    }
 }
