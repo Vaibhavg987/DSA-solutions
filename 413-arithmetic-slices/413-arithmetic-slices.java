@@ -3,12 +3,13 @@ class Solution {
         if(nums.length < 3) return 0;
         
         int ans=0;
-        int[] dp = new int[nums.length];
+        int prev=0;
+        // int[] dp = new int[nums.length];
         for(int i=2;i<nums.length;i++){
             if(nums[i] - nums[i-1] == nums[i-1] - nums[i-2]){
-                dp[i] = dp[i-1]+1;
-                ans+=dp[i];
-            }
+                prev+=1;
+                ans+=prev;
+            }else prev=0;
         }
         return ans;
     }
