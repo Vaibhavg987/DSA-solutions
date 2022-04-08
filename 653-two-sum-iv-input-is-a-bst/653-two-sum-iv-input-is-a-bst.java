@@ -13,26 +13,46 @@
  *     }
  * }
  */
+class BSTIterator {
+    private Stack<TreeNode> st = new Stack<>();
+    boolean reverse = true;
+    public BSTIterator(TreeNode root,boolean isReverse) {
+        reverse = isReverse;
+        pushAll(root);
+    }
+    
+    public int next() {
+         TreeNode node = st.pop();
+        if(reverse == false) pushAll(node.right);
+            else pushAll(node.left);
+        return node.val;
+     
+    }
+    
+    public boolean hasNext() {
+        return !st.isEmpty();
+    }
+    private void pushAll(TreeNode root){
+        while(root!=null){
+            st.push(root);
+            if(reverse == true) root = root.right;
+            else root = root.left;
+        }
+    }
+}
 class Solution {
     public boolean findTarget(TreeNode root, int k) {
-        List<Integer> inorder = new ArrayList<>();
-        getInorder(root,inorder);
-        int i=0,j=inorder.size()-1;
+         if(root == null) return false;
+         BSTIterator l = new BSTIterator(root,false);    
+         BSTIterator r = new BSTIterator(root,true);
+        
+         int i=l.next();
+        int j=r.next();
         while(i<j){
-            if(inorder.get(i) + inorder.get(j) > k){
-                j--;
-            }else if(inorder.get(i) + inorder.get(j) < k){
-                i++;
-            }else{
-                return true;
-            }
+            if(i+j == k) return true;
+            else if(i+j < k) i=l.next();
+            else j=r.next();
         }
         return false;
-    }
-    private void getInorder(TreeNode root,List<Integer> list){
-        if(root == null) return;
-        getInorder(root.left,list);
-        list.add(root.val);
-        getInorder(root.right,list);
     }
 }
