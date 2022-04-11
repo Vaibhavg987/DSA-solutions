@@ -1,26 +1,21 @@
 class Solution {
     public boolean canPartition(int[] nums) {
+        if(nums.length == 1) return false;
         int sum = 0;
         for(int val: nums) sum+=val;
         if(sum%2==1) return false;
         
-        int[][] dp = new int[nums.length+1][sum/2+1];
-        return f(nums.length-1,sum/2,nums,dp);
-    }
-    public boolean f(int i,int target,int[] a,int[][] dp){
-        if(target == 0) return true;
-        if(i==0) return a[i] == target;
-        
-        if(dp[i][target]!=0){
-            if(dp[i][target] == 1) return false;
-            else return true;
-        }
-        boolean notTake = f(i-1,target,a,dp);
-        boolean take = false;
-        if(a[i]<=target) take = f(i-1,target-a[i],a,dp);
-         
-        dp[i][target] = notTake || take ? 2 : 1;
-        
-        return take || notTake;
-    }
+       	return find(nums,sum/2);
+
+	}
+	public boolean find(int []nums,int t){
+		boolean dp[]=new boolean[t+1];
+		dp[0]=true;
+		for(int i=0;i<nums.length;i++){
+			for(int j=t;j>0;j--){
+				if(j>=nums[i]) dp[j]|= dp[j-nums[i]]; 
+			}
+		}
+		return dp[t];
+	}
 }
