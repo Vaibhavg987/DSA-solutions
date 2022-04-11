@@ -5,17 +5,28 @@ class Solution {
         for(int val: nums) sum+=val;
         if(sum%2==1) return false;
         
-       	return find(nums,sum/2);
+        int target = sum/2;
+        int n = nums.length;
+        int[][] dp = new int[n][target+1];
 
+	for(int t = 0; t <= target; t++) {
+		dp[0][t] = (t == nums[0]) ? 1 : 0;
 	}
-	public boolean find(int []nums,int t){
-		boolean dp[]=new boolean[t+1];
-		dp[0]=true;
-		for(int i=0;i<nums.length;i++){
-			for(int j=t;j>0;j--){
-				if(j>=nums[i]) dp[j]|= dp[j-nums[i]]; 
+	for(int i = 0; i < n; i++)
+		dp[i][0] = 1;
+
+	for(int i = 1; i < n; i++) {
+		for(int t = 1; t <= target; t++) {
+			int notpick = dp[i-1][t];
+			int pick = 0;
+			if(nums[i] <= t) {
+				pick = dp[i-1][t-nums[i]];
 			}
+			dp[i][t] = (notpick == 1 || pick == 1) ? 1 : 0;
 		}
-		return dp[t];
 	}
+
+	return dp[n-1][target] == 1 ? true : false;
+    }
+   
 }
