@@ -25,6 +25,7 @@ class Solution {
         path+=String.valueOf(node.val);
         if(node.left == null && node.right == null){
             ans.add(path);
+            return;
         }
         if(node.left!=null) paths(node.left,path+"->",ans);
         if(node.right!=null) paths(node.right,path+"->",ans);
